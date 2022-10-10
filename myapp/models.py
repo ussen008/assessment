@@ -37,6 +37,12 @@ class Resources(models.Model):
 
 
 class ComprehensiveControl(models.Model):
+	TYPE_ASSESSMENT = [
+		('Комплексное наблюдение урока', 'Комплексное наблюдение урока'),
+		('Планирование урока', 'Планирование урока'),
+		('Преподавание', 'Преподавание'),
+		('Оценивание учебных достижений учащихся', 'Оценивание учебных достижений учащихся')
+	]
 	TYPE_PLAN = [
 		('самостоятельно разработанного урока', 'самостоятельно разработанного урока'),
 		('совместно разработанного с коллегами урока в рамках исследования урока', 'совместно разработанного с коллегами урока в рамках исследования урока'),
@@ -44,15 +50,15 @@ class ComprehensiveControl(models.Model):
 		('урока по авторской программе', 'урока по авторской программе'),
 		('урока по авторской методике', 'урока по авторской методике' )
 	]
-
 	BOOL_CHOICES = [(True, 'Да'), (False, 'Нет')]
+	assessment_type = models.CharField(verbose_name="Тип оценивание", choices=TYPE_ASSESSMENT, max_length=255, default="Комлексное наблюдение урока")
 	lesson_title  = models.CharField(max_length=255, verbose_name='Тема урока')
 	lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='Предмет')
 	categoryclass = models.ForeignKey(CategoryClass, on_delete=models.CASCADE, verbose_name='Класс')
 	date_of_observ = models.DateTimeField(verbose_name='Дата наблюдения урока', auto_now_add=True)
 	teacher = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Выберите учителя')
 	goal_prof_develop = models.CharField(max_length=255, verbose_name='Цель профессионального развития на учебный год')
-	observer = models.ForeignKey(User, on_delete=models.DO_NOTHING,  verbose_name='Наблюдатель', related_name='observer')
+	observer = models.ForeignKey(User, on_delete=models.CASCADE,  verbose_name='Наблюдатель', related_name='+')
 	plan = models.CharField(max_length=255, verbose_name='Предаставлен план', choices=TYPE_PLAN, default='самостоятельно разработанного урока')
 	lern_obj = models.BooleanField(choices=BOOL_CHOICES, verbose_name='Цели обучения соответствуют месту и роли урока в структуре раздела, темы')
 	teacher_discus = models.BooleanField(choices=BOOL_CHOICES, verbose_name='Учитель обсуждает с учащимися цели обучения и ожидаемые результаты урока')
@@ -71,6 +77,13 @@ class ComprehensiveControl(models.Model):
 
 class Teaching(models.Model):
 
+	TYPE_ASSESSMENT = [
+		('Комплексное наблюдение урока', 'Комплексное наблюдение урока'),
+		('Планирование урока', 'Планирование урока'),
+		('Преподавание', 'Преподавание'),
+		('Оценивание учебных достижений учащихся', 'Оценивание учебных достижений учащихся')
+	]
+
 	TYPE_PLAN = [
 		('самостоятельно разработанного урока', 'самостоятельно разработанного урока'),
 		('совместно разработанного с коллегами урока в рамках исследования урока', 'совместно разработанного с коллегами урока в рамках исследования урока'),
@@ -79,12 +92,13 @@ class Teaching(models.Model):
 		('урока по авторской методике', 'урока по авторской методике' )
 	]
 	BOOL_CHOICES = [(True, 'Да'), (False, 'Нет')]
+	assessment_type = models.CharField(verbose_name="Тип оценивание", choices=TYPE_ASSESSMENT, max_length=255, default="Комлексное наблюдение урока")
 	date_of_observ = models.DateTimeField(verbose_name='Дата наблюдения урока', auto_now_add=True)
 	categoryclass = models.ForeignKey(CategoryClass, on_delete=models.CASCADE, verbose_name='Класс')
 	lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='Предмет')
 	lesson_title  = models.CharField(max_length=255, verbose_name='Тема урока')
 	goal_prof_develop = models.CharField(max_length=255, verbose_name='Цель профессионального развития на учебный год')
-	observer = models.CharField(max_length=255, verbose_name='Наблюдатель')
+	observer = models.ForeignKey(User, on_delete=models.DO_NOTHING,  verbose_name='Наблюдатель', related_name='+')
 	teacher = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Выберите учителя')
 	plan = models.CharField(max_length=255, verbose_name='Учителем предоставлен', choices=TYPE_PLAN, default='самостоятельно разработанного урока')
 	teacher_discus = models.BooleanField(choices=BOOL_CHOICES, verbose_name='Учитель обсуждает с учащимися цели обучения и ожидаемые результаты урока')
@@ -97,6 +111,14 @@ class Teaching(models.Model):
 
 
 class PlanningLesson(models.Model):
+
+	TYPE_ASSESSMENT = [
+		('Комплексное наблюдение урока', 'Комплексное наблюдение урока'),
+		('Планирование урока', 'Планирование урока'),
+		('Преподавание', 'Преподавание'),
+		('Оценивание учебных достижений учащихся', 'Оценивание учебных достижений учащихся')
+	]
+
 	TYPE_PLAN = [
 		('самостоятельно разработанного урока', 'самостоятельно разработанного урока'),
 		('совместно разработанного с коллегами урока в рамках исследования урока', 'совместно разработанного с коллегами урока в рамках исследования урока'),
@@ -105,13 +127,14 @@ class PlanningLesson(models.Model):
 		('урока по авторской методике', 'урока по авторской методике' )
 	]
 	BOOL_CHOICES = [(True, 'Да'), (False, 'Нет')]
+	assessment_type = models.CharField(verbose_name="Тип оценивание", choices=TYPE_ASSESSMENT, max_length=255, default="Комлексное наблюдение урока")
 	date_of_observ = models.DateTimeField(verbose_name='Дата наблюдения урока', auto_now_add=True)
 	categoryclass = models.ForeignKey(CategoryClass, on_delete=models.CASCADE, verbose_name='Класс')
 	lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='Предмет')
 	lesson_title  = models.CharField(max_length=255, verbose_name='Тема урока')
 	teacher = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Выберите учителя')
 	goal_prof_develop = models.CharField(max_length=255, verbose_name='Цель профессионального развития на учебный год')
-	observer = models.CharField(max_length=255, verbose_name='Наблюдатель')
+	observer = models.ForeignKey(User, on_delete=models.DO_NOTHING,  verbose_name='Наблюдатель', related_name='+')
 	plan = models.CharField(max_length=255, verbose_name='Учителем предоставлен', choices=TYPE_PLAN, default='самостоятельно разработанного урока')
 	plan_contains = models.BooleanField(verbose_name="План содержит понятные для учащихся ожидаемые результаты урока и критерии успеха", choices=BOOL_CHOICES)
 	organizestudy = models.ManyToManyField(OrganizeStudy, verbose_name='Учебный материал отражает')
@@ -123,7 +146,16 @@ class PlanningLesson(models.Model):
 
 
 class AssessmentStudentLearning(models.Model):
+
+	TYPE_ASSESSMENT = [
+		('Комплексное наблюдение урока', 'Комплексное наблюдение урока'),
+		('Планирование урока', 'Планирование урока'),
+		('Преподавание', 'Преподавание'),
+		('Оценивание учебных достижений учащихся', 'Оценивание учебных достижений учащихся')
+	]
+
 	BOOL_CHOICES = [(True, 'Да'), (False, 'Нет')]
+	assessment_type = models.CharField(verbose_name="Тип оценивание", choices=TYPE_ASSESSMENT, max_length=255, default="Комлексное наблюдение урока")
 	date_of_observ = models.DateTimeField(verbose_name='Дата наблюдения урока', auto_now_add=True)
 	categoryclass = models.ForeignKey(CategoryClass, on_delete=models.CASCADE, verbose_name='Класс')
 	lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='Предмет')

@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from myapp.forms import ControlForm, TeachingForm, PlanningForm, EducationalAchievmentsForm
 from django.contrib.auth.decorators import login_required
+from itertools import chain 
 
-from myapp.models import ComprehensiveControl
+from myapp.models import ComprehensiveControl, Teaching, PlanningLesson, AssessmentStudentLearning
 # Create your views here.
 
 @login_required
@@ -56,11 +57,14 @@ def educationachievment(request):
         form = EducationalAchievmentsForm()
     return render(request, 'myapp/achievment.html', {'form': form})
 
-
+@login_required
 def assessment_for_me(request):
-    forme = ComprehensiveControl.objects.get(id = request.user.id)
-    return render(request, 'for_me.html', {'forme': forme})
+    forme = ComprehensiveControl.objects.filter(teacher=request.user)
+    return render(request, 'myapp/for_me.html', {'forme': forme})
 
+    
+@login_required
 def assessment_from_me(request):
-    fromme = ComprehensiveControl.objects.exclude(request.user)
-    return render(request, 'from_me.html', {'fromme': fromme})
+    fromme = ComprehensiveControl.objects.filter(observer=request.user)
+    
+    return render(request, 'myapp/from_me.html', {'fromme': fromme})

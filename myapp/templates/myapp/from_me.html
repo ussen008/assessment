@@ -1,0 +1,35 @@
+{% extends 'myapp/base.html' %}
+
+{% block content %}
+<div class=container>
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Вид оценивание</th>
+                <th>Тема урока</th>
+                <th>Учитель(ница)</th>
+                <th>Наблюдатель</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+        {% for me in fromme %}
+            <tr>
+               <td>{{me.id}}</td> 
+               <td>{{me.assessment_type}}</td>
+               <td>{{me.lesson_title }}</td>
+               <td>{{me.teacher }}</td>
+               <td>{{me.observer}}</td>     
+            </tr>
+            
+            {% endfor %}
+        </tbody>    
+    </table>
+  
+
+    
+   
+</div>
+
+{% endblock %}
